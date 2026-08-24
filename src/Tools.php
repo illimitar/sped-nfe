@@ -108,6 +108,8 @@ class Tools extends ToolsCommon
             $parameters = ['nfeDadosMsgZip' => $gzdata];
             $body = "<nfeDadosMsgZip xmlns=\"$this->urlNamespace\">$gzdata</nfeDadosMsgZip>";
         }
+        // sleep(10);
+        // throw new RuntimeException("cURL error 28: Operation timed out after 10000 milliseconds with 0 out of 0 bytes received");
         $this->lastResponse = $this->sendRequest($body, $parameters);
         return $this->lastResponse;
     }
@@ -142,6 +144,8 @@ class Tools extends ToolsCommon
         $this->lastRequest = $request;
         $parameters = ['nfeDadosMsg' => $request];
         $body = "<nfeDadosMsg xmlns=\"$this->urlNamespace\">$request</nfeDadosMsg>";
+        // sleep(10);
+        // throw new RuntimeException("cURL error 28: Operation timed out after 10000 milliseconds with 0 out of 0 bytes received");
         $this->lastResponse = $this->sendRequest($body, $parameters);
         return $this->lastResponse;
     }
