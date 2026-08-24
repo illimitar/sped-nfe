@@ -30,43 +30,43 @@ class SAE
      * Last SOAP request body
      * @var string
      */
-    public string $lastRequest = '';
+    public $lastRequest = '';
 
     /**
      * Last SOAP response body
      * @var string
      */
-    public string $lastResponse = '';
+    public $lastResponse = '';
 
     /**
      * @var Certificate
      */
-    protected Certificate $certificate;
+    protected $certificate;
 
     /**
      * @var int
      */
-    protected int $tpAmb;
+    protected $tpAmb;
 
     /**
      * @var string
      */
-    protected string $uf;
+    protected $uf;
 
     /**
      * @var \stdClass
      */
-    protected \stdClass $config;
+    protected $config;
 
     /**
      * @var SoapInterface|null
      */
-    protected ?SoapInterface $soap = null;
+    protected $soap = null;
 
     /**
      * @var string
      */
-    protected string $pathwsfiles = '';
+    protected $pathwsfiles = '';
 
     /**
      * @param Certificate $certificate e-CNPJ certificate used for authentication

@@ -525,7 +525,16 @@ class Tools
      */
     protected function sendRequest(string $request, array $parameters = []): string
     {
+        // sleep(40);
+        // throw new RuntimeException("An error occurred while trying to communication via soap, Operation timed out after 40001 milliseconds with 0 outh of -1 bytes received");
         $this->checkSoap();
+        warning(array(
+            '$this->urlService' => $this->urlService,
+            '$this->urlMethod' => $this->urlMethod,
+            '$this->urlAction' => $this->urlAction,
+            '$this->objHeader' => $this->objHeader,
+            '$request' => $request
+        ));
         $response = (string) $this->soap->send(
             $this->urlService,
             $this->urlMethod,
@@ -536,6 +545,7 @@ class Tools
             $request,
             $this->objHeader
         );
+        // throw new RuntimeException("An error occurred while trying to communication via soap, Operation timed out after 40001 milliseconds with 0 outh of -1 bytes received");
         return Strings::normalize($response);
     }
 
