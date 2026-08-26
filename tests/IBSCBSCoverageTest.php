@@ -746,6 +746,115 @@ class IBSCBSCoverageTest extends NFeTestCase
         $this->assertStringContainsString('<vTotCBSMonoItem>65.00</vTotCBSMonoItem>', $xml);
     }
 
+    public function test_tagIBSCBSMono_ad_valorem_all_subgroups(): void
+    {
+        $std = new \stdClass();
+        $std->item = 1;
+        $std->gIBSMonoAdValorem_vBCMono = 1000.00;
+        $std->gIBSMonoAdValorem_pAliqMonoUF = 0.1000;
+        $std->gIBSMonoAdValorem_vIBSMonoUF = 1.00;
+        $std->gIBSMonoAdValorem_pAliqMonoMun = 0.0500;
+        $std->gIBSMonoAdValorem_vIBSMonoMun = 0.50;
+        $std->gIBSMonoAdValorem_vIBSMono = 1.50;
+        $std->gIBSMonoAdValorem_vBCMonoReten = 200.00;
+        $std->gIBSMonoAdValorem_pAliqMonoReten = 0.0800;
+        $std->gIBSMonoAdValorem_vIBSMonoReten = 16.00;
+        $std->gIBSMonoAdValorem_vIBSMonoRet = 7.00;
+        $std->gIBSMonoAdValorem_qBCBioComb = 4.0000;
+        $std->gIBSMonoAdValorem_vIBSDiferenca = 2.50;
+        $std->gCBSMonoAdValorem_vBCMono = 1000.00;
+        $std->gCBSMonoAdValorem_pAliqMonoCBS = 0.9000;
+        $std->gCBSMonoAdValorem_vCBSMono = 9.00;
+        $std->gCBSMonoAdValorem_vBCMonoReten = 200.00;
+        $std->gCBSMonoAdValorem_pAliqMonoReten = 0.4000;
+        $std->gCBSMonoAdValorem_vCBSMonoReten = 80.00;
+        $std->gCBSMonoAdValorem_vCBSMonoRet = 11.00;
+        $std->gCBSMonoAdValorem_qBCBioComb = 4.0000;
+        $std->gCBSMonoAdValorem_vCBSDiferenca = 3.20;
+
+        $result = $this->make->tagIBSCBSMono($std);
+
+        $xml = $result->ownerDocument->saveXML($result);
+        $this->assertStringContainsString('<gIBSMonoAdValorem>', $xml);
+        $this->assertStringContainsString('<gCBSMonoAdValorem>', $xml);
+        $this->assertStringContainsString('<vBCMonoReten>200.00</vBCMonoReten>', $xml);
+        $this->assertStringContainsString('<pAliqMonoReten>0.0800</pAliqMonoReten>', $xml);
+        $this->assertStringContainsString('<vIBSMonoReten>16.00</vIBSMonoReten>', $xml);
+        $this->assertStringContainsString('<pAliqMonoReten>0.4000</pAliqMonoReten>', $xml);
+        $this->assertStringContainsString('<vCBSMonoReten>80.00</vCBSMonoReten>', $xml);
+        $this->assertStringContainsString('<vIBSMonoRet>7.00</vIBSMonoRet>', $xml);
+        $this->assertStringContainsString('<vCBSMonoRet>11.00</vCBSMonoRet>', $xml);
+        $this->assertStringContainsString('<gpBioDiferenca>', $xml);
+        $this->assertStringContainsString('<qBCBioComb>4.0000</qBCBioComb>', $xml);
+        $this->assertStringContainsString('<vIBSDiferenca>2.50</vIBSDiferenca>', $xml);
+        $this->assertStringContainsString('<vCBSDiferenca>3.20</vCBSDiferenca>', $xml);
+        $this->assertStringNotContainsString('<gIBSMonoAdRem>', $xml);
+        $this->assertStringNotContainsString('<gMonoDif>', $xml);
+    }
+
+    public function test_tagIBSCBSMono_ad_valorem_totals_and_gMono(): void
+    {
+        $std = new \stdClass();
+        $std->item = 1;
+        $std->gIBSMonoAdValorem_vBCMono = 1000.00;
+        $std->gIBSMonoAdValorem_pAliqMonoUF = 0.1000;
+        $std->gIBSMonoAdValorem_vIBSMonoUF = 1.00;
+        $std->gIBSMonoAdValorem_pAliqMonoMun = 0.0500;
+        $std->gIBSMonoAdValorem_vIBSMonoMun = 0.50;
+        $std->gIBSMonoAdValorem_vIBSMono = 1.50;
+        $std->gIBSMonoAdValorem_vBCMonoReten = 200.00;
+        $std->gIBSMonoAdValorem_pAliqMonoReten = 0.0800;
+        $std->gIBSMonoAdValorem_vIBSMonoReten = 16.00;
+        $std->gIBSMonoAdValorem_vIBSMonoRet = 7.00;
+        $std->gIBSMonoAdValorem_qBCBioComb = 4.0000;
+        $std->gIBSMonoAdValorem_vIBSDiferenca = 2.50;
+        $std->gCBSMonoAdValorem_vBCMono = 1000.00;
+        $std->gCBSMonoAdValorem_pAliqMonoCBS = 0.9000;
+        $std->gCBSMonoAdValorem_vCBSMono = 9.00;
+        $std->gCBSMonoAdValorem_vBCMonoReten = 200.00;
+        $std->gCBSMonoAdValorem_pAliqMonoReten = 0.4000;
+        $std->gCBSMonoAdValorem_vCBSMonoReten = 80.00;
+        $std->gCBSMonoAdValorem_vCBSMonoRet = 11.00;
+        $std->gCBSMonoAdValorem_qBCBioComb = 4.0000;
+        $std->gCBSMonoAdValorem_vCBSDiferenca = 3.20;
+
+        $result = $this->make->tagIBSCBSMono($std);
+
+        $xml = $result->ownerDocument->saveXML($result);
+        $this->assertStringContainsString('<vTotIBSMonoItem>17.50</vTotIBSMonoItem>', $xml);
+        $this->assertStringContainsString('<vTotCBSMonoItem>89.00</vTotCBSMonoItem>', $xml);
+
+        $prop = new \ReflectionProperty($this->make, 'stdIBSCBSTot');
+        $prop->setAccessible(true);
+        $tot = $prop->getValue($this->make);
+        $this->assertEquals(1.50, $tot->gMono->vIBSMono);
+        $this->assertEquals(9.00, $tot->gMono->vCBSMono);
+        $this->assertEquals(16.00, $tot->gMono->vIBSMonoReten);
+        $this->assertEquals(80.00, $tot->gMono->vCBSMonoReten);
+        $this->assertEquals(7.00, $tot->gMono->vIBSMonoRet);
+        $this->assertEquals(11.00, $tot->gMono->vCBSMonoRet);
+    }
+
+    public function test_tagIBSCBSMono_initializes_aVItem_when_missing(): void
+    {
+        $std = new \stdClass();
+        $std->item = 2;
+        $std->gIBSMonoAdRem_qBCMono = 10.0000;
+        $std->gIBSMonoAdRem_adRemIBS = 1.0000;
+        $std->gIBSMonoAdRem_vIBSMono = 10.00;
+
+        $result = $this->make->tagIBSCBSMono($std);
+
+        $xml = $result->ownerDocument->saveXML($result);
+        $this->assertStringContainsString('<vTotIBSMonoItem>10.00</vTotIBSMonoItem>', $xml);
+
+        $prop = new \ReflectionProperty($this->make, 'aVItem');
+        $prop->setAccessible(true);
+        $aVItem = $prop->getValue($this->make);
+        $this->assertArrayHasKey(2, $aVItem);
+        $this->assertEquals(10.00, $aVItem[2]['vTotIBSMonoItem']);
+    }
+
     // =========================================================================
     // taggTransfCred
     // =========================================================================
