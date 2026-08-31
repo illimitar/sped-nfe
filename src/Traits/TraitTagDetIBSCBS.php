@@ -186,7 +186,7 @@ trait TraitTagDetIBSCBS
                 $this->dom->addChild(
                     $gDevTrib,
                     "pDevTrib",
-                    $this->conditionalNumberFormatting($std->gIBSUF_pDevTrib ?? null),
+                    $this->conditionalNumberFormatting($std->gIBSUF_pDevTrib ?? null, 4),
                     false,
                     "$identificador Percentual de devolução do IBS da UF (pDevTrib)"
                 );
@@ -263,7 +263,7 @@ trait TraitTagDetIBSCBS
                 $this->dom->addChild(
                     $gDevTrib,
                     "pDevTrib",
-                    $this->conditionalNumberFormatting($std->gIBSMun_pDevTrib ?? null),
+                    $this->conditionalNumberFormatting($std->gIBSMun_pDevTrib ?? null, 4),
                     false,
                     "$identificador Percentual de devolução do IBS do Município (pDevTrib)"
                 );
@@ -347,7 +347,7 @@ trait TraitTagDetIBSCBS
                 $this->dom->addChild(
                     $gDevTrib,
                     "pDevTrib",
-                    $this->conditionalNumberFormatting($std->gCBS_pDevTrib ?? null),
+                    $this->conditionalNumberFormatting($std->gCBS_pDevTrib ?? null, 4),
                     false,
                     "$identificador Percentual de devolução da CBS (pDevTrib)"
                 );

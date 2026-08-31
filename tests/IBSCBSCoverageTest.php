@@ -234,6 +234,51 @@ class IBSCBSCoverageTest extends NFeTestCase
         $this->assertStringContainsString('<vDevTrib>2.00</vDevTrib>', $xml);
     }
 
+    public function test_tagIBSCBS_with_pDevTrib(): void
+    {
+        $std = new \stdClass();
+        $std->item = 1;
+        $std->CST = '00';
+        $std->cClassTrib = '12345678';
+        $std->vBC = 100.00;
+        $std->gIBSUF_pIBSUF = 9.5000;
+        $std->gIBSUF_pDevTrib = 10.5000;
+        $std->gIBSUF_vDevTrib = 1.00;
+        $std->gIBSUF_vIBSUF = 8.50;
+        $std->gIBSMun_pIBSMun = 3.5000;
+        $std->gIBSMun_pDevTrib = 5.2500;
+        $std->gIBSMun_vDevTrib = 0.50;
+        $std->gIBSMun_vIBSMun = 3.00;
+        $std->gCBS_pCBS = 8.8000;
+        $std->gCBS_pDevTrib = 2.7500;
+        $std->gCBS_vDevTrib = 0.25;
+        $std->gCBS_vCBS = 8.55;
+
+        $result = $this->make->tagIBSCBS($std);
+
+        $xml = $result->ownerDocument->saveXML($result);
+        $dom = new \DOMDocument();
+        $dom->loadXML($xml);
+
+        $gIBSUF = $dom->getElementsByTagName('gIBSUF')->item(0);
+        $devTribUF = $gIBSUF->getElementsByTagName('gDevTrib')->item(0);
+        $this->assertNotNull($devTribUF);
+        $this->assertEquals('10.5000', $devTribUF->getElementsByTagName('pDevTrib')->item(0)->nodeValue);
+        $this->assertEquals('1.00', $devTribUF->getElementsByTagName('vDevTrib')->item(0)->nodeValue);
+
+        $gIBSMun = $dom->getElementsByTagName('gIBSMun')->item(0);
+        $devTribMun = $gIBSMun->getElementsByTagName('gDevTrib')->item(0);
+        $this->assertNotNull($devTribMun);
+        $this->assertEquals('5.2500', $devTribMun->getElementsByTagName('pDevTrib')->item(0)->nodeValue);
+        $this->assertEquals('0.50', $devTribMun->getElementsByTagName('vDevTrib')->item(0)->nodeValue);
+
+        $gCBS = $dom->getElementsByTagName('gCBS')->item(0);
+        $devTribCBS = $gCBS->getElementsByTagName('gDevTrib')->item(0);
+        $this->assertNotNull($devTribCBS);
+        $this->assertEquals('2.7500', $devTribCBS->getElementsByTagName('pDevTrib')->item(0)->nodeValue);
+        $this->assertEquals('0.25', $devTribCBS->getElementsByTagName('vDevTrib')->item(0)->nodeValue);
+    }
+
     public function test_tagIBSCBS_with_gIBSUF_reducao_aliquota(): void
     {
         $std = new \stdClass();
@@ -673,6 +718,38 @@ class IBSCBSCoverageTest extends NFeTestCase
         $this->assertStringContainsString('<vCBSMono>9.00</vCBSMono>', $xml);
         $this->assertStringNotContainsString('<gIBSMonoAdRem>', $xml);
         $this->assertStringNotContainsString('<gMonoDif>', $xml);
+    }
+
+    public function test_tagIBSCBSMono_mixed_ad_valorem_ibs_ad_rem_cbs(): void
+    {
+        $std = new \stdClass();
+        $std->item = 1;
+        $std->gIBSMonoAdValorem_vBCMono = 1000.00;
+        $std->gIBSMonoAdValorem_pAliqMonoUF = 0.1000;
+        $std->gIBSMonoAdValorem_vIBSMonoUF = 1.00;
+        $std->gIBSMonoAdValorem_pAliqMonoMun = 0.0500;
+        $std->gIBSMonoAdValorem_vIBSMonoMun = 0.50;
+        $std->gIBSMonoAdValorem_vIBSMono = 1.50;
+        $std->gCBSMonoAdRem_qBCMono = 500.0000;
+        $std->gCBSMonoAdRem_adRemCBS = 0.8000;
+        $std->gCBSMonoAdRem_vCBSMono = 400.00;
+
+        $result = $this->make->tagIBSCBSMono($std);
+
+        $xml = $result->ownerDocument->saveXML($result);
+        $this->assertStringContainsString('<gIBSMonoAdValorem>', $xml);
+        $this->assertStringContainsString('<gCBSMonoAdRem>', $xml);
+        $this->assertStringNotContainsString('<gIBSMonoAdRem>', $xml);
+        $this->assertStringNotContainsString('<gCBSMonoAdValorem>', $xml);
+        $this->assertStringNotContainsString('<gMonoDif>', $xml);
+        $this->assertStringContainsString('<vTotIBSMonoItem>1.50</vTotIBSMonoItem>', $xml);
+        $this->assertStringContainsString('<vTotCBSMonoItem>400.00</vTotCBSMonoItem>', $xml);
+
+        $prop = new \ReflectionProperty($this->make, 'stdIBSCBSTot');
+        $prop->setAccessible(true);
+        $tot = $prop->getValue($this->make);
+        $this->assertEquals(1.50, $tot->gMono->vIBSMono);
+        $this->assertEquals(400.00, $tot->gMono->vCBSMono);
     }
 
     public function test_tagIBSCBSMono_all_groups(): void
